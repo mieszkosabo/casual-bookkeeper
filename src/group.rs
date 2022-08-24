@@ -55,10 +55,10 @@ mod test {
     fn test_group_remove_member() {
         let mut group = Group::new(String::from("test_group"));
         let member = Member::new(String::from("test_member"));
-        let id = member.id.clone();
+        let name = member.name.clone();
         group.add_member(member);
         assert_eq!(group.members.len(), 1);
-        group.remove_member(&id);
+        group.remove_member(&name);
         assert_eq!(group.members.len(), 0);
     }
 }

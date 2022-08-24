@@ -5,20 +5,31 @@ use colored::Colorize;
 const MAX_DEBT_STRIP_LEN: i32 = 50;
 
 fn create_debt_strip(max_value: &f64, person_balance: &f64) -> String {
-    let debt_strip_len = (person_balance.abs() / max_value * MAX_DEBT_STRIP_LEN as f64) as usize;
+    let debt_strip_len = 1.max((person_balance.abs() / max_value * MAX_DEBT_STRIP_LEN as f64) as usize) as usize;
     let personal_balance_len = person_balance.to_string().len();
-    let debt_strip = person_balance
-        .to_string() + &" ".repeat(debt_strip_len - personal_balance_len);
-
-    if person_balance < &0.0 {
-        debt_strip.on_red().bold().bright_white().to_string()
+    if debt_strip_len >= personal_balance_len {
+        let debt_strip = person_balance
+            .to_string() + &" ".repeat(debt_strip_len - personal_balance_len);
+        if person_balance < &0.0 {
+            return debt_strip.on_red().bold().bright_white().to_string();
+        } else {
+            return debt_strip.on_green().bold().bright_white().to_string();
+        }
     } else {
-        debt_strip.on_green().bold().bright_white().to_string()
+        let balance_as_str = person_balance.to_string();
+        let (strip_part, no_strip_part) = balance_as_str
+            .split_at(debt_strip_len);
+        if person_balance < &0.0 {
+            return strip_part.on_red().bold().bright_white().to_string() + no_strip_part;
+        } else {
+            return strip_part.on_green().bold().bright_white().to_string() + no_strip_part;
+        }
     }
+
 }
 
 pub fn print_balance(balance: &Balance) -> () {
-    println!("{}", "BALANCE SUMMARY".bold().white());
+    println!("{}\n", "BALANCE SUMMARY".bold().white());
     balance
         .iter()
         .map(|(_, value)| value.abs())
@@ -34,8 +45,13 @@ pub fn print_balance(balance: &Balance) -> () {
                         std::cmp::Ordering::Equal => std::cmp::Ordering::Equal,
                     }
             });
+            let longest_name_len = balance_copy
+                .iter()
+                .map(|(name, _)| name.len())
+                .max()
+                .unwrap(); // we know that the balance list in not empty
             for (person, person_balance) in balance_copy {
-                println!("{}:\t{}", person, create_debt_strip(&max_value, &person_balance));
+                println!("{:width$} {}", person, create_debt_strip(&max_value, &person_balance), width=longest_name_len);
             }
         });
 

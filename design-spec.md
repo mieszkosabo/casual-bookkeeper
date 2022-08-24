@@ -27,8 +27,10 @@
 
 #### Show balance
 
-Nicely display the group balance, like who is in debt, who is being owed and how much. With colors etc.
+- [x] Nicely display the group balance, like who is in debt, who is being owed and how much. With colors etc.
 
 #### Settle up
 
-Generate list of minimal number of transfers to be made to settle up the group balance.
+https://math.stackexchange.com/questions/263220/calculating-the-most-efficient-number-of-group-payment-transactions-required
+
+- [x] Generate list of minimal number of transfers to be made to settle up the group balance.

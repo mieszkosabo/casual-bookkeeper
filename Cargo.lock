@@ -20,7 +20,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "casual-bookkepper"
+name = "casual-bookkeeper"
 version = "0.1.0"
 dependencies = [
  "anyhow",
