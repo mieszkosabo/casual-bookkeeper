@@ -1,28 +1,17 @@
-use casual_bookkepper::api::*;
+use casual_bookkepper::{api::*, display::print_balance, expense::{calculate_balance, create_detailed_expense}};
 
 use anyhow::Result;
 
 fn main() -> Result<()> {
     erase_state()?;
-    if let Ok(id) = create_group(String::from("test")) {
-        println!("Created group with id: {}", &id);
-        if add_member(&id, "Ziomeczek".into()).is_ok() {
-            println!("Added member to group");
-        }
-        if add_member(&id, "Ziomeczek 2".into()).is_ok() {
-            println!("Added member to group");
-        }
-        if add_member(&id, "Ziomeczek 2".into()).is_err() {
-            println!("Couldn't add member of the same name to the group");
-        }
-        if remove_member(&id, "Ziomeczek".into()).is_ok() {
-            println!("Removed member from group");
-        }
-
-        if remove_group(&id).is_ok() {
-            println!("Removed group");
-        }
-    }
-
+    print_balance(&calculate_balance(create_detailed_expense(
+        "Alice".into(),
+        "Lunch".into(),
+        vec![
+            ("Bob".into(), 17.00), 
+            ("Carol".into(), 22.40),
+            ("Danny".into(), 13.40)
+            ]
+    )));
     Ok(())
 }
